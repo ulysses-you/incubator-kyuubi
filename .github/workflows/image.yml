@@ -22,7 +22,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: .
           file: docker/Dockerfile
           push: true
           tags: ulyssesyou18/kyuubi:master-snapshot
