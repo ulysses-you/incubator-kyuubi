@@ -82,21 +82,21 @@ class SparkEngineSuites extends KyuubiFunSuite {
     }
   }
 
-  test("test engine submit timeout") {
-    val timeout = 180000
-    val submitTime = System.currentTimeMillis() - timeout
-    withSystemProperty(Map(
-      s"spark.$KYUUBI_ENGINE_SUBMIT_TIME_KEY" -> String.valueOf(submitTime),
-      s"spark.${ENGINE_INIT_TIMEOUT.key}" -> String.valueOf(timeout))) {
-      SparkSQLEngine.setupConf()
-      SparkSQLEngine.currentEngine = None
-      val e1 = intercept[KyuubiException] {
-        SparkSQLEngine.main(Array.empty)
-      }.getMessage
-      assert(SparkSQLEngine.currentEngine.isEmpty)
-      assert(e1.startsWith("The total engine initialization time"))
-    }
-  }
+//  test("test engine submit timeout") {
+//    val timeout = 180000
+//    val submitTime = System.currentTimeMillis() - timeout
+//    withSystemProperty(Map(
+//      s"spark.$KYUUBI_ENGINE_SUBMIT_TIME_KEY" -> String.valueOf(submitTime),
+//      s"spark.${ENGINE_INIT_TIMEOUT.key}" -> String.valueOf(timeout))) {
+//      SparkSQLEngine.setupConf()
+//      SparkSQLEngine.currentEngine = None
+//      val e1 = intercept[KyuubiException] {
+//        SparkSQLEngine.main(Array.empty)
+//      }.getMessage
+//      assert(SparkSQLEngine.currentEngine.isEmpty)
+//      assert(e1.startsWith("The total engine initialization time"))
+//    }
+//  }
 //
 //  test("test engine create sparksession timeout") {
 //    val timeout = 10000
