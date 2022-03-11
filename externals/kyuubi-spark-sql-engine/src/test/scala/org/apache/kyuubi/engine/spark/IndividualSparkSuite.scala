@@ -98,7 +98,7 @@ class SparkEngineSuites extends KyuubiFunSuite {
     }
   }
 
-  ignore("test engine create sparksession timeout") {
+  test("test engine create sparksession timeout") {
     val timeout = 10000
     val submitTime = System.currentTimeMillis()
     withSystemProperty(Map(
