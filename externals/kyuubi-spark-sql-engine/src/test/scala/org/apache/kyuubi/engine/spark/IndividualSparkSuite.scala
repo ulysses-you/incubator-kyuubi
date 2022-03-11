@@ -90,9 +90,9 @@ class SparkEngineSuites extends KyuubiFunSuite {
     println(System.getProperty(s"spark.${ENGINE_INIT_TIMEOUT.key}"))
     println("===============================")
     // scalastyle:on
-    withSystemProperty(Map(
-      s"spark.$KYUUBI_ENGINE_SUBMIT_TIME_KEY" -> String.valueOf(submitTime),
-      s"spark.${ENGINE_INIT_TIMEOUT.key}" -> String.valueOf(timeout))) {
+//    withSystemProperty(Map(
+//      s"spark.$KYUUBI_ENGINE_SUBMIT_TIME_KEY" -> String.valueOf(submitTime),
+//      s"spark.${ENGINE_INIT_TIMEOUT.key}" -> String.valueOf(timeout))) {
 //      SparkSQLEngine.setupConf()
 //      SparkSQLEngine.currentEngine = None
 //      val e1 = intercept[KyuubiException] {
@@ -100,7 +100,7 @@ class SparkEngineSuites extends KyuubiFunSuite {
 //      }.getMessage
 //      assert(SparkSQLEngine.currentEngine.isEmpty)
 //      assert(e1.startsWith("The total engine initialization time"))
-    }
+//    }
     // scalastyle:off
     println(System.getProperty(s"spark.$KYUUBI_ENGINE_SUBMIT_TIME_KEY"))
     println(System.getProperty(s"spark.${ENGINE_INIT_TIMEOUT.key}"))
