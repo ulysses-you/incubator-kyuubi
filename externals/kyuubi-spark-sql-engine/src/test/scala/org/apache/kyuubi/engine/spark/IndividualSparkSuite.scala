@@ -82,7 +82,7 @@ class SparkEngineSuites extends KyuubiFunSuite {
     }
   }
 
-  test("test engine submit timeout") {
+  ignore("test engine submit timeout") {
 //    val timeout = 180000
 //    val submitTime = System.currentTimeMillis() - timeout
 //    // scalastyle:off
