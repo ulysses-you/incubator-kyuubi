@@ -204,7 +204,9 @@ object SparkSQLEngine extends Logging {
           createSpark()
         }
         val timeout = initTimeout - totalInitTime
+        info(s"engine time out: $timeout, init timeout: $initTimeout, init time: $totalInitTime")
         spark = Await.result(sparkFuture, timeout.millisecond)
+        info(s"spark session: ${spark.conf.getAll}")
         try {
           startEngine(spark)
           // blocking main thread
