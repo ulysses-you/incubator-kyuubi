@@ -17,12 +17,14 @@
 
 package org.apache.kyuubi.kubernetes.test.spark
 
-import org.apache.kyuubi.{Logging, WithKyuubiServer}
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.net.NetUtils
+
+import org.apache.kyuubi.{Logging, Utils, WithKyuubiServer, WithSimpleDFSService}
 import org.apache.kyuubi.config.KyuubiConf
 import org.apache.kyuubi.kubernetes.test.MiniKube
 import org.apache.kyuubi.operation.SparkQueryTests
 
-// TODO Support Spark Cluster mode
 abstract class SparkOnKubernetesSuiteBase
   extends WithKyuubiServer with SparkQueryTests with Logging {
   private val apiServerAddress = {
@@ -57,5 +59,34 @@ abstract class SparkOnKubernetesSuiteBase
 class SparkClientModeOnKubernetesSuite extends SparkOnKubernetesSuiteBase {
   override protected val conf: KyuubiConf = {
     sparkOnK8sConf.set("spark.submit.deployMode", "client")
+  }
+}
+
+/**
+ * This test is for Kyuubi Server with Spark engine Using cluster deploy-mode on Kubernetes:
+ *
+ *               Real World                         Kubernetes Pod                Kubernetes Pod
+ *  ----------------------------------          ---------------------         ---------------------
+ *  |          JDBC                   |         |                   |         |                   |
+ *  |  Client  ---->  Kyuubi Server   |  ---->  |    Spark Driver   |  ---->  |  Spark Executors  |
+ *  |                                 |         |                   |         |                   |
+ *  ----------------------------------          ---------------------         ---------------------
+ */
+class SparkClusterModeOnKubernetesSuite
+  extends SparkOnKubernetesSuiteBase with WithSimpleDFSService {
+
+  override val hadoopConf: Configuration = {
+    val hdfsConf: Configuration = new Configuration()
+    hdfsConf.set("dfs.namenode.rpc-bind-host", "0.0.0.0")
+    hdfsConf.set("dfs.namenode.servicerpc-bind-host", "0.0.0.0")
+    hdfsConf.set("dfs.datanode.hostname", Utils.findLocalInetAddress.getHostName)
+    hdfsConf.set("dfs.datanode.address", s"0.0.0.0:${NetUtils.getFreeSocketPort}")
+    hdfsConf
+  }
+
+  override protected lazy val conf: KyuubiConf = {
+    sparkOnK8sConf.set("spark.submit.deployMode", "cluster")
+      .set("spark.kubernetes.file.upload.path", getDefaultFS + "/spark")
+      .set("spark.hadoop.dfs.client.use.datanode.hostname", "true")
   }
 }
