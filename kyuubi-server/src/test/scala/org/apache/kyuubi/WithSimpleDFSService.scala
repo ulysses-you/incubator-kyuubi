@@ -26,12 +26,7 @@ trait WithSimpleDFSService extends KyuubiFunSuite {
 
   private var miniDFSService: MiniDFSService = _
 
-  def hadoopConf: Configuration = {
-    val hdfsConf = new Configuration()
-    hdfsConf.set("ignore.secure.ports.for.testing", "true")
-    hdfsConf.set("hadoop.security.authentication", "simple")
-    hdfsConf
-  }
+  def hadoopConf: Configuration = new Configuration()
 
   override def beforeAll(): Unit = {
     miniDFSService = new MiniDFSService(hadoopConf)
