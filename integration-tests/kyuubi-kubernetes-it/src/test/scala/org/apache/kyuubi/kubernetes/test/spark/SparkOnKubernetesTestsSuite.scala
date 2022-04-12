@@ -40,9 +40,10 @@ abstract class SparkOnKubernetesSuiteBase
       .set("spark.kubernetes.container.image", "apache/spark:v3.2.1")
       .set("spark.kubernetes.container.image.pullPolicy", "IfNotPresent")
       .set("spark.executor.instances", "1")
-      .set("spark.executor.cores", "1")
       .set("spark.executor.memory", "512M")
       .set("spark.driver.memory", "512M")
+      .set("spark.kubernetes.driver.request.cores", "250m")
+      .set("spark.kubernetes.executor.request.cores", "250m")
   }
 
   override protected def jdbcUrl: String = getJdbcUrl
