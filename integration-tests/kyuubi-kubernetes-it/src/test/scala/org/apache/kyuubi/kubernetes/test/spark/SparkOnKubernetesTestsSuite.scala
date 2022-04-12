@@ -78,6 +78,8 @@ class SparkClientModeOnKubernetesSuite extends SparkOnKubernetesSuiteBase {
 class SparkClusterModeOnKubernetesSuite
   extends SparkOnKubernetesSuiteBase with WithSimpleDFSService {
   private val localhostAddress = Utils.findLocalInetAddress.getHostAddress
+  private val driverTemplate =
+    Thread.currentThread().getContextClassLoader.getResource("driver.yml")
 
   override val hadoopConf: Configuration = {
     val hdfsConf: Configuration = new Configuration()
@@ -96,6 +98,7 @@ class SparkClusterModeOnKubernetesSuite
       .set("spark.kubernetes.file.upload.path", s"hdfs://$localhostAddress:$getDFSPort/spark")
       .set("spark.hadoop.dfs.client.use.datanode.hostname", "true")
       .set("spark.kubernetes.authenticate.driver.serviceAccountName", "spark")
+      .set("spark.kubernetes.driver.podTemplateFile", driverTemplate.getPath)
       .set(ZK_CLIENT_PORT_ADDRESS.key, localhostAddress)
       .set(FRONTEND_CONNECTION_URL_USE_HOSTNAME.key, "false")
       .set(FRONTEND_THRIFT_BINARY_BIND_HOST.key, localhostAddress)
