@@ -46,7 +46,7 @@ jobs:
           minikube version: 'v1.25.2'
           kubernetes version: 'v1.23.3'
           driver: docker
-          start args: '--extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 2 --memory 4096'
+          start args: '--extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 3 --memory 4096'
       # in case: https://spark.apache.org/docs/latest/running-on-kubernetes.html#rbac
       - name: Create Service Account
         run: |
@@ -66,7 +66,9 @@ jobs:
           -Dtest=none -DwildcardSuites=org.apache.kyuubi.kubernetes.test.spark
       - name: Print Driver Pod logs
         if: failure()
-        run: kubectl get pods | grep driver | awk -F " " '{print$1}' | xargs -I {} kubectl logs {}
+        run: |
+          kubectl get pods
+          kubectl get pods | grep driver | awk -F " " '{print$1}' | xargs -I {} kubectl logs {}
       - name: Upload test logs
         if: failure()
         uses: actions/upload-artifact@v2
