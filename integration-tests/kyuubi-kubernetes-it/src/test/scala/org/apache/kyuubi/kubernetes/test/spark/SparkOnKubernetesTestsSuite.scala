@@ -74,21 +74,20 @@ class SparkClientModeOnKubernetesSuite extends SparkOnKubernetesSuiteBase {
  */
 class SparkClusterModeOnKubernetesSuite
   extends SparkOnKubernetesSuiteBase with WithSimpleDFSService {
-
-  private val localHost = Utils.findLocalInetAddress.getHostName
+  private val localhost = Utils.findLocalInetAddress.getHostAddress
 
   override val hadoopConf: Configuration = {
     val hdfsConf: Configuration = new Configuration()
     hdfsConf.set("dfs.namenode.rpc-bind-host", "0.0.0.0")
     hdfsConf.set("dfs.namenode.servicerpc-bind-host", "0.0.0.0")
-    hdfsConf.set("dfs.datanode.hostname", localHost)
+    hdfsConf.set("dfs.datanode.hostname", localhost)
     hdfsConf.set("dfs.datanode.address", s"0.0.0.0:${NetUtils.getFreeSocketPort}")
     hdfsConf
   }
 
   override protected lazy val conf: KyuubiConf = {
     sparkOnK8sConf.set("spark.submit.deployMode", "cluster")
-      .set("spark.kubernetes.file.upload.path", s"hdfs://$localHost:$getDFSPort/spark")
+      .set("spark.kubernetes.file.upload.path", s"hdfs://$localhost:$getDFSPort/spark")
       .set("spark.hadoop.dfs.client.use.datanode.hostname", "true")
   }
 }
