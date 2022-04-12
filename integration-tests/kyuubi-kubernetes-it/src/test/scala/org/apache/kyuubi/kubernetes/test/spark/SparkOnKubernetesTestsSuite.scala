@@ -24,6 +24,7 @@ import org.apache.kyuubi.{Logging, Utils, WithKyuubiServer, WithSimpleDFSService
 import org.apache.kyuubi.config.KyuubiConf
 import org.apache.kyuubi.kubernetes.test.MiniKube
 import org.apache.kyuubi.operation.SparkQueryTests
+import org.apache.kyuubi.zookeeper.ZookeeperConf.ZK_CLIENT_PORT_ADDRESS
 
 abstract class SparkOnKubernetesSuiteBase
   extends WithKyuubiServer with SparkQueryTests with Logging {
@@ -89,5 +90,6 @@ class SparkClusterModeOnKubernetesSuite
     sparkOnK8sConf.set("spark.submit.deployMode", "cluster")
       .set("spark.kubernetes.file.upload.path", s"hdfs://$localhost:$getDFSPort/spark")
       .set("spark.hadoop.dfs.client.use.datanode.hostname", "true")
+      .set(ZK_CLIENT_PORT_ADDRESS.key, localhost)
   }
 }
