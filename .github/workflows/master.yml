@@ -59,6 +59,7 @@ jobs:
           -Pkubernetes-it
           -Dtest=none -DwildcardSuites=org.apache.kyuubi.kubernetes.test.spark
       - name: get pod logs
+        if: failure()
         run: kubectl get pods | grep driver | awk -F " " '{print$1}' | xargs -I {} kubectl logs {}
       - name: Upload test logs
         if: failure()
