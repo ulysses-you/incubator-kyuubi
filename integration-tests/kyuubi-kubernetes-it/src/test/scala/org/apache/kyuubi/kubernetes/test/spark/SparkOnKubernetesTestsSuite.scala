@@ -94,6 +94,7 @@ class SparkClusterModeOnKubernetesSuite
     sparkOnK8sConf.set("spark.submit.deployMode", "cluster")
       .set("spark.kubernetes.file.upload.path", s"hdfs://$localhostAddress:$getDFSPort/spark")
       .set("spark.hadoop.dfs.client.use.datanode.hostname", "true")
+      .set("spark.kubernetes.authenticate.driver.serviceAccountName", "spark")
       .set(ZK_CLIENT_PORT_ADDRESS.key, localhostAddress)
       .set(FRONTEND_THRIFT_BINARY_BIND_HOST.key, localhostAddress)
   }
