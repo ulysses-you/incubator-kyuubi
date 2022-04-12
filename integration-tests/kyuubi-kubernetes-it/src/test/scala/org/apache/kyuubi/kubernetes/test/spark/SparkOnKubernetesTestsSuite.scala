@@ -93,5 +93,7 @@ class SparkClusterModeOnKubernetesSuite
       .set("spark.hadoop.dfs.client.use.datanode.hostname", "true")
       .set(ZK_CLIENT_PORT_ADDRESS.key, localhostAddress)
       .set(FRONTEND_THRIFT_BINARY_BIND_HOST.key, localhostAddress)
+      .set("spark.hadoop.hadoop.proxyuser.185.groups", "*")
+      .set("spark.hadoop.hadoop.proxyuser.185.hosts", "*")
   }
 }
