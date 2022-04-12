@@ -47,6 +47,7 @@ jobs:
           kubernetes version: 'v1.23.3'
           driver: docker
           start args: '--extra-config=kubeadm.ignore-preflight-errors=NumCPU --force --cpus 2 --memory 4096'
+      # in case: https://spark.apache.org/docs/latest/running-on-kubernetes.html#rbac
       - name: Create Service Account
         run: |
           kubectl create serviceaccount spark
@@ -63,7 +64,7 @@ jobs:
           -Pflink-provided,hive-provided
           -Pkubernetes-it
           -Dtest=none -DwildcardSuites=org.apache.kyuubi.kubernetes.test.spark
-      - name: get pod logs
+      - name: Print Driver Pod logs
         if: failure()
         run: kubectl get pods | grep driver | awk -F " " '{print$1}' | xargs -I {} kubectl logs {}
       - name: Upload test logs
