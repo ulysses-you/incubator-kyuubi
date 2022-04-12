@@ -63,4 +63,5 @@ class MiniDFSService(name: String, hdfsConf: Configuration)
   }
 
   def getHadoopConf: Configuration = hdfsConf
+  def getDFSPort: Int = hdfsCluster.getNameNodePort
 }
